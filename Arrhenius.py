@@ -38,9 +38,10 @@ yfit = linear_p[0] * x + linear_p[1] # calcula os valores preditos
 yresid = y - yfit # resíduo = valor real - valor ajustado (valor predito)
 SQresid = sum(pow(yresid,2)) # soma dos quadrados dos resíduos 
 SQtotal = len(y) * np.var(y) # número de elementos do vetor y vezes a variância de y
-R2 = 1 - SQresid/SQtotal # coeficiente de determinação
+r2 = 1 - SQresid/SQtotal # coeficiente de determinação
 
-
+print(50*"_")
+print('Ajuste Linear')
 #dados do modelo ajustado
 dados_v = np.transpose(np.exp(yfit))
 dados_df = pd.DataFrame({"Temperatura":dados_np[:,0], "velocidade_mod":dados_v, "velocidade_exp":dados_np[:,1]})
@@ -48,8 +49,8 @@ print(dados_df)
 
 print(f'A energia de ativação é: {Ea:9.7} Joules/mol')
 print(f'O fator de frequencia é: {A:9.5} 1/s')
-print(f'O Coeficiente de ajuste é: {R2:5.5}')
-
+print(f'O Coeficiente de ajuste é: {r2:5.5}')
+print(50*"_")
 
 
 # Ajustes não linear da dados experimentais de Arrhenius
@@ -63,11 +64,9 @@ dados_np = dados.values
 
 #vetor do eixo x
 x = dados_np[:, 0]
-print(x)
 
 #vetor do eixo y
 y = dados_np[:, 1]
-print(y)
 
 # Definição do modelo
 def Arr(x, A, E):
@@ -77,9 +76,6 @@ def Arr(x, A, E):
 # Chamada de curve_fit
 popt, pcov = curve_fit(Arr, x, y, p0=(10000, 10), maxfev=2000)
 p1, p2 = popt
-
-# Impressão dos parâmetros ótimos
-print("Os parâmetros ajustados são p1=%g, p2=%g" % (p1, p2))
 
 y_ajustado = Arr(x, p1, p2)
 #impressão dos dados experimentais e do modelo
@@ -94,6 +90,7 @@ plt.show()
 
 r2 = 1. - sum((Arr(x, p1, p2) - y) ** 2) / sum((y - np.mean(y)) ** 2)
 
+print('Ajuste não-linear')
 #dados do modelo ajustado
 dados_df = pd.DataFrame(
     {"Temperatura": x, "velocidade_mod": y_ajustado, "velocidade_exp": y})
@@ -102,7 +99,7 @@ print(dados_df)
 print(f'A energia de ativação é: {p2:9.7} Joules/mol')
 print(f'O fator de frequencia é: {p1:9.5} 1/s')
 print(f'O Coeficiente de ajuste é: {r2:5.4}')
-
+print(50*"_")
 
 
 
